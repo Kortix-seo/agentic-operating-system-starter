@@ -4,7 +4,7 @@ A small, working Kortix project you can read in one sitting: one committed `kort
 specialist agents, the approval policy that holds a payment until a person signs it, and a script that
 prints every grant in the project as a table.
 
-Kortix is the open-source AI Operating System: your agents, their skills, your company memory and every
+Kortix is the open-source CompanyOS: your agents, their skills, your company memory and every
 connector in one git repo you own. This repo is the smallest honest example of the part that matters to a
 security reviewer, which is the governance half. An agentic operating system decides what each agent may
 reach, on which machine, and who approves a consequential call. Here those decisions are files, and the
