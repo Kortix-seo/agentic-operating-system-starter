@@ -49,9 +49,12 @@ reported as a sync error.
 
 ## What a held call returns
 
-A held call returns `202` with `status: "pending_approval"`, an `approval_url`, a summary and an execution
-id. Nothing ran. A person opens it in Review, through the URL, or on the approval card in a Slack or Teams
-thread, and the page asks for a signed-in account that can approve actions in the project.
+A held call answers `202` and nothing has run. From code the SDK raises
+`ConnectorApprovalPendingError`, whose `approvalUrl` opens the approval and whose `executionId` names the
+held call; with a project-scoped token the held response carries `runs_on_approval: true`, and a repeat
+while the call waits or runs returns the same `execution_id`. A person opens the approval in the Review
+page, through that URL, or on the approval card in a Slack or Teams thread, and the page asks for a
+signed-in account that can approve actions in the project.
 
 One approval covers one exact request: same connector, same action, same arguments, same account. Change
 an argument and the call needs a new approval. There is no session-wide approval, so any action that must
