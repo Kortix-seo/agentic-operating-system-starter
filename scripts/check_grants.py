@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Print every grant in a Kortix project as a table, and flag the wide defaults.
 
-Reads the project manifest (kortix.yaml) and reports, per agent: its file, what
-it may reach, whether it names its tools, and whether it holds `all` on a
-deny-by-default key. Runs on a commit, not on a running project, so it can gate
+Reads the project manifest (kortix.yaml) and reports, per agent: its prompt file,
+what it may reach, whether it names its tools, and whether it holds `all` on a
+deny-by-default key. Works on a v3 manifest (`prompt_file`) and on the v2
+`file:` form. Runs on a commit, not on a running project, so it can gate
 a change request in CI.
 
     python3 scripts/check_grants.py kortix.yaml
@@ -76,15 +77,16 @@ def check(doc: dict, base: str) -> tuple[list[dict], list[dict]]:
     rows, findings = [], []
     for name, block in agents.items():
         block = block if isinstance(block, dict) else {}
-        agent_file = block.get("file") or f"agents/{name}.md"
-        row = {"agent": name, "file": agent_file}
+        agent_file = block.get("prompt_file") or block.get("file") or f"agents/{name}.md"
+        inline_prompt = isinstance(block.get("prompt"), str) and block.get("prompt").strip() != ""
+        row = {"agent": name, "file": "-" if inline_prompt else agent_file}
         for key in DENY_BY_DEFAULT:
             row[key] = describe(block.get(key))
         row["skills"] = describe(block.get("skills"))
         row["tools"] = describe(block.get("tools"))
         rows.append(row)
 
-        if not os.path.exists(os.path.join(base, agent_file)):
+        if not inline_prompt and not os.path.exists(os.path.join(base, agent_file)):
             findings.append({
                 "severity": "HIGH", "agent": name,
                 "finding": f"file {agent_file!r} does not exist",
