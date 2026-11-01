@@ -1,17 +1,20 @@
-# A deny-by-default Kortix project.
+# yaml-language-server: $schema=https://kortix.com/schema/kortix.v3.schema.json
+#
+# A deny-by-default Kortix project, on the v3 manifest.
 #
 # Three specialist agents, each granted only what its job needs, plus the
 # project-wide approval policy. Read this file with the agent files beside it:
-# in a v2 manifest behavior (prompt, model, permission) lives in agents/<name>.md
-# and governance (connectors, secrets, apps, kortix_permissions, skills, tools)
-# lives here.
+# in v3 behavior (prompt, model, mode, permission) is a key on the agent's block
+# here, `prompt_file` names the file that holds the prompt alone, and governance
+# (connectors, secrets, apps, kortix_permissions, skills, tools) is on the same
+# block.
 #
 # Grants are deny-by-default: an agent with no connectors, secrets, apps or
 # kortix_permissions key gets none of them. Two keys differ, and both are named
 # explicitly below for every agent:
 #   - an omitted `tools` key grants every tool
-#   - an omitted `skills` key leaves skill access to the agent file's own rule
-kortix_version: 2
+#   - an omitted `skills` key grants no skill
+kortix_version: 3
 
 default_agent: ops-readout
 
@@ -23,18 +26,17 @@ env:
   required: []
   optional: [HELPDESK_API_KEY, REPORT_SLACK_WEBHOOK]
 
-# Tools every agent of the project gets, unless its own `tools:` grant narrows
-# it. `kortix:<name>` is a tool Kortix maintains.
-tools:
-  web_search: kortix:web_search
-  scrape_webpage: kortix:scrape_webpage
-  memory: kortix:memory
-  show: kortix:show
+# Every Kortix tool is registered in v3, and a registry entry gives no agent
+# anything. Each agent below narrows what it may call with its own `tools:` grant.
 
 agents:
   # Reporting agent: reads two connectors, writes a file, runs on a schedule.
   ops-readout:
-    file: agents/ops-readout.md
+    description: "Builds the Monday readout: reads billing and warehouse connectors, returns one spreadsheet with the variance called out. Runs on a Sunday-night trigger."
+    mode: primary
+    prompt_file: agents/ops-readout.md
+    permission: allow
+    steps: 40
     connectors: [billing, warehouse]
     secrets: [REPORT_SLACK_WEBHOOK]
     skills: [kortix-cli]
@@ -47,7 +49,12 @@ agents:
 
   # Triage agent: one connector, and its write action waits for a person.
   support-triage:
-    file: agents/support-triage.md
+    description: "Reads overnight support tickets, groups them by cause, drafts the replies it can support and holds the rest for a person. One connector, no writes."
+    mode: primary
+    prompt_file: agents/support-triage.md
+    permission:
+      bash: ask
+      edit: deny
     connectors: [helpdesk]
     secrets: [HELPDESK_API_KEY]
     skills: [kortix-cli]
@@ -58,7 +65,19 @@ agents:
 
   # Read-only agent: no connectors, no secrets, no merge, no writes.
   release-check:
-    file: agents/release-check.md
+    description: "Read-only pre-release check: confirms the manifest validates, lists every grant in the project and compares it with the previous release. No connectors, no secrets, no writes."
+    mode: primary
+    prompt_file: agents/release-check.md
+    permission:
+      edit: deny
+      bash:
+        "*": deny
+        "kortix validate*": allow
+        "kortix agents ls*": allow
+        "kortix connectors policy ls*": allow
+        "python3 scripts/check_grants.py*": allow
+        "git diff *": allow
+        "git log *": allow
     connectors: none
     secrets: none
     kortix_permissions:
