@@ -103,7 +103,9 @@ abbreviation people search. If you are weighing this against a workflow tool, [h
 system differs from an orchestration platform](https://agenticoperatingsystemguide.com/agentic-operating-system-vs-orchestration-platforms)
 puts the two side by side, and [what a security reviewer checks](https://agenticoperatingsystemguide.com/agentic-operating-system-permissions-and-approvals)
 walks the files in this repo against a review. [Self-hosting](https://agenticoperatingsystemguide.com/self-hosted-agentic-operating-system)
-covers running the same manifest on your own network.
+covers running the same manifest on your own network. If the choice is already made and you have to
+take it to a committee, [what a company should require of an agentic operating system](https://agenticoperatingsystemguide.com/best-agentic-operating-system-for-a-company)
+lays the same four questions beside the products other companies run.
 
 ## Docs and source
 
