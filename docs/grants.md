@@ -1,9 +1,10 @@
 # Grants in an open-source Kortix project: what each agent may touch, and who can widen it
 
-An agent is two halves. Behavior (prompt, model, mode, `permission` rules for its tools) lives in
-`agents/<name>.md`. Governance (connectors, secrets, apps, skills, Kortix permissions, tools) lives in
-the `agents.<name>` block in `kortix.yaml`. In a v2 project the block rejects a behavior key; the
-manifest is the grant, the file is the job. The governance half is the part this repo ships; [the definition, with the five jobs the layer does for an agent](https://agenticoperatingsystemguide.com/what-is-an-agentic-operating-system) covers the whole layer.
+An agent is two halves. Behavior (prompt, model, mode, `permission` rules for its tools) and governance
+(connectors, secrets, apps, skills, Kortix permissions, tools) both live on the `agents.<name>` block in
+`kortix.yaml`, and `prompt_file` names the one file that holds the prompt alone. On a `kortix_version: 3`
+manifest the block is the whole agent, so a review reads one file and a diff to it is the change. This
+repo ships the governance half; [the definition, with the five jobs the layer does for an agent](https://agenticoperatingsystemguide.com/what-is-an-agentic-operating-system) covers the whole layer.
 
 ## The six grants
 
@@ -20,7 +21,7 @@ Four are deny-by-default. Two are not, and those two decide the width of a revie
 
 - `tools` omitted grants every tool, which is the widest default in the file. Every agent in this repo
   names `tools` for that reason.
-- `skills` omitted means the agent file decides, and a bare `permission: allow` allows every skill.
+- `skills` omitted grants no skill; an agent that names `all` on `skills` holds every registered skill and every Kortix skill.
 
 An agent that names `all` or `"*"` on any of the four deny-by-default keys holds every connector, every
 secret, every App or every project permission in the project. The starter project Kortix ships does this
