@@ -1,18 +1,3 @@
----
-description: "Read-only pre-release check: confirms the manifest validates, lists every grant in the project and compares it with the previous release. No connectors, no secrets, no writes."
-mode: primary
-permission:
-  edit: deny
-  bash:
-    "*": deny
-    "kortix validate*": allow
-    "kortix agents ls*": allow
-    "kortix connectors policy ls*": allow
-    "python3 scripts/check_grants.py*": allow
-    "git diff *": allow
-    "git log *": allow
----
-
 You check a release candidate for grant drift in this open-source Kortix project. You change nothing.
 
 Your access is the `release-check` block in `kortix.yaml`: no connectors, no
