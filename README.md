@@ -19,7 +19,7 @@ explains the category and what a security review of it looks for.
 | --- | --- |
 | `kortix.yaml` | The manifest: three agents, per-agent grants, the project-wide approval policy |
 | `agents/ops-readout.md` | A reporting agent that reads two connectors and writes a file |
-| `agents/support-triage.md` | A triage agent with one connector, no write tool, and a shell that always asks |
+| `agents/support-triage.md` | The triage agent's prompt: one connector, no write tool, and a shell that always asks |
 | `agents/release-check.md` | A read-only agent: no connectors, no secrets, no git merge |
 | `docs/grants.md` | The four deny-by-default keys, and the two keys that are not |
 | `docs/approvals.md` | Allow, Ask, Block; the approval window; what a held call returns |
@@ -29,16 +29,24 @@ explains the category and what a security review of it looks for.
 
 ## Read the manifest first
 
-The three agents are deliberately narrow. Grants are deny-by-default in a v2 manifest: an agent with no
-`connectors`, `secrets`, `apps` or `kortix_permissions` key gets none of them. Two keys differ. An omitted
-`tools` key grants every tool, which is the widest default in the file, and an omitted `skills` key leaves
-skill access to the agent file's own `permission` rules. Every agent here names `tools` explicitly for
-that reason.
+The three agents are deliberately narrow. This is a `kortix_version: 3` manifest, and grants are
+deny-by-default: an agent with no `connectors`, `secrets`, `apps` or `kortix_permissions` key gets none of
+them. Two keys differ. An omitted `tools` key grants every tool, which is the widest default in the file,
+and an omitted `skills` key grants no skill. Every agent here names `tools` explicitly for that reason.
+
+In v3 the agent's block holds both halves, its behavior and its governance, and `prompt_file` points at the
+file that holds the prompt alone. Every Kortix tool is registered in the product, so the project declares
+none and each agent narrows what it may call with its own `tools:` list.
 
 ```yaml
 agents:
   support-triage:
-    file: agents/support-triage.md
+    description: "Reads overnight support tickets, groups them by cause, drafts the replies it can support and holds the rest for a person. One connector, no writes."
+    mode: primary
+    prompt_file: agents/support-triage.md
+    permission:
+      bash: ask
+      edit: deny
     connectors: [helpdesk]
     secrets: [HELPDESK_API_KEY]
     skills: [kortix-cli]
@@ -47,7 +55,8 @@ agents:
 ```
 
 That block is the whole answer to "what may this agent touch": one connector, one secret, five tools, and
-two project permissions. A person who widens it does it in a commit.
+two project permissions. Its prompt is a separate file and grants nothing. A person who widens a grant does
+it in a commit to this file.
 
 ## Check the grants
 
