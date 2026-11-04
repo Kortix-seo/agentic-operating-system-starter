@@ -105,7 +105,9 @@ puts the two side by side, and [what a security reviewer checks](https://agentic
 walks the files in this repo against a review. [Self-hosting](https://agenticoperatingsystemguide.com/self-hosted-agentic-operating-system)
 covers running the same manifest on your own network. If the choice is already made and you have to
 take it to a committee, [what a company should require of an agentic operating system](https://agenticoperatingsystemguide.com/best-agentic-operating-system-for-a-company)
-lays the same four questions beside the products other companies run.
+lays the same four questions beside the products other companies run. If you are starting from a
+shortlist rather than a blank page, [the open-source agentic operating system alternatives](https://agenticoperatingsystemguide.com/open-source-agentic-operating-system-alternatives)
+compares the projects that carry the name and what each one actually ships.
 
 ## Docs and source
 
