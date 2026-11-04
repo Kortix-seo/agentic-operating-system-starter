@@ -111,7 +111,7 @@ lays the same four questions beside the products other companies run.
 
 - [Kortix docs: agents and permissions](https://kortix.com/docs/project/agents)
 - [Kortix docs: connectors, policies and approvals](https://kortix.com/docs/connect/connectors)
-- [Kortix on GitHub](https://github.com/kortix-ai/suna)
+- [Kortix on GitHub](https://github.com/kortix-ai/CompanyOS)
 
 The manifest shape, the grant keys and the policy keys are the platform's own, checked against the
 `kortix.yaml` reference and the connectors reference on 2026-10-25. The three agents, the docs and the
