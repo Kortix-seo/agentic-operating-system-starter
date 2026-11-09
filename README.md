@@ -107,7 +107,10 @@ covers running the same manifest on your own network. If the choice is already m
 take it to a committee, [what a company should require of an agentic operating system](https://agenticoperatingsystemguide.com/best-agentic-operating-system-for-a-company)
 lays the same four questions beside the products other companies run. If you are starting from a
 shortlist rather than a blank page, [the open-source agentic operating system alternatives](https://agenticoperatingsystemguide.com/open-source-agentic-operating-system-alternatives)
-compares the projects that carry the name and what each one actually ships.
+compares the projects that carry the name and what each one actually ships. If what you are
+naming is the application rather than the category, [what makes an operating system
+agent-native](https://agenticoperatingsystemguide.com/agent-native-operating-system) lists the
+properties a buyer can check before trusting the label.
 
 ## Docs and source
 
